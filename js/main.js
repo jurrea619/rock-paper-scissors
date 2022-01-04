@@ -9,11 +9,9 @@ function computerPlay(){
 
 // return 'win', 'lose', or 'tie'
 function playRound(playerSelection, computerSelection) {
-    // convert player entry to lowercase for comparison
-    let playerSelectionLowered = playerSelection.toLowerCase();
 
     // check for tie
-    if (computerSelection === playerSelectionLowered) {
+    if (computerSelection === playerSelection) {
         return `Both chose ${computerSelection}. Its a Tie =/`
     }
 
@@ -21,7 +19,7 @@ function playRound(playerSelection, computerSelection) {
     let winner;
 
     // no tie, compare both players' choice
-    switch(playerSelectionLowered){
+    switch(playerSelection){
         case 'rock': // rock smashes scissors, loses to paper (how?!?)
         winner = computerSelection === 'scissors' ? true : false;
         break;
@@ -44,35 +42,34 @@ function playRound(playerSelection, computerSelection) {
     }
 }
 
-// play 5 round game
 function game(){
-    const playerName = prompt("Enter your name:");
-
     // initialize score counters
     let playerTally = 0;
-    let compTally = 0;
+    let computerTally = 0;
+    // initialize player choice variable. Assigned on button click
+    let playerChoice;
 
-    // game loop
-    for(let i = 0 ; i <= 4 ; i++){
-        // get both choices, player and comp
-        playerChoice = prompt(`${playerName}: Enter rock, paper, or scissors`);
-        compChoice = computerPlay();
-        // play round
-        result = playRound(playerChoice, compChoice);
-        // update score if either wins. if tie, decrement counter for replay
-        if (result === 'win'){ playerTally++; }
-        else if (result === 'lose') { compTally++; }
-        else { 
-            console.log(`Tie game. Round will replay.`);
-            i--;
-        }
-
-        // round score
-        console.log(`Score: ${playerName}=>${playerTally}, Computer=>${compTally}`);
-    } // loop exit
-
-    //  log winner
-    playerTally > compTally ? console.log(`${playerName} wins`) : console.log(`Computer wins`);
+    const results = document.querySelector('#results');
+    const score = document.querySelector('#score');
+    const buttons = document.querySelectorAll('button');
+    buttons.forEach((button) => {
+        button.addEventListener('click', () => {
+            playerChoice = button.value;
+            const compChoice = computerPlay();
+            const result = playRound(playerChoice, compChoice);
+            if (result === 'win') {
+                 playerTally++; 
+            }
+            else if (result === 'lose') {
+                 computerTally++; 
+            }
+            else{
+                results.textContent = "Tie game"
+            }
+            score.textContent = `Player: ${playerTally}, Computer: ${computerTally}`;
+            window.setTimeout(()=>{results.textContent="";},1000);
+        });
+    });
 }
 
 game();
