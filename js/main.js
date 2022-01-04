@@ -1,4 +1,9 @@
 const choices = ["rock", "paper", "scissors"]; // game options
+const results = document.querySelector('#results');
+const score = document.querySelector('#score');
+const buttons = document.querySelectorAll('button');
+let playerTally = 0;
+let computerTally = 0;
 
 // return random choice for computer
 function computerPlay(){
@@ -42,34 +47,45 @@ function playRound(playerSelection, computerSelection) {
     }
 }
 
-function game(){
-    // initialize score counters
-    let playerTally = 0;
-    let computerTally = 0;
-    // initialize player choice variable. Assigned on button click
-    let playerChoice;
+function playGame(playerChoice){
+    //const playerChoice = button.value;
+    const compChoice = computerPlay();
+    const result = playRound(playerChoice, compChoice);
+    if (result === 'win') {
+        playerTally++;
+    }
+    else if (result === 'lose') {
+        computerTally++;
+    }
+    else {
+        results.textContent = "Tie game, try again."
+    }
+    score.textContent = `Player: ${playerTally}, Computer: ${computerTally}`;
+    if (playerTally >= 5 || computerTally >= 5) {
+        results.textContent = playerTally >= 5 ? "Player wins" : "Comp Wins";
+        //removeListeners();
+    }
+    else {
+        window.setTimeout(() => { results.textContent = ""; }, 2000);
+    }
+}
 
-    const results = document.querySelector('#results');
-    const score = document.querySelector('#score');
+/* REFACTOR LISTENER FUNCTION
+function removeListeners(){
     const buttons = document.querySelectorAll('button');
     buttons.forEach((button) => {
+        button.removeEventListener('click', buttonPress());
+    });
+}
+*/
+
+function attachListeners(){ 
+    buttons.forEach((button) => {
         button.addEventListener('click', () => {
-            playerChoice = button.value;
-            const compChoice = computerPlay();
-            const result = playRound(playerChoice, compChoice);
-            if (result === 'win') {
-                 playerTally++; 
-            }
-            else if (result === 'lose') {
-                 computerTally++; 
-            }
-            else{
-                results.textContent = "Tie game"
-            }
-            score.textContent = `Player: ${playerTally}, Computer: ${computerTally}`;
-            window.setTimeout(()=>{results.textContent="";},1000);
+            const playerChoice = button.value;
+            playGame(playerChoice);
         });
     });
 }
 
-game();
+attachListeners();
