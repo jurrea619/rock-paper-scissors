@@ -1,4 +1,3 @@
-const choices = ["rock", "paper", "scissors"]; // game options
 const results = document.querySelector('#results');
 const score = document.querySelector('#score');
 const buttons = document.querySelectorAll('button');
@@ -7,6 +6,7 @@ let computerTally = 0;
 
 // return random choice for computer
 function computerPlay(){
+    const choices = ["rock", "paper", "scissors"]; // game options
     // choose random index between 0 and 2, return choice at given index
     let randomIndex = Math.floor(Math.random() * choices.length) ; 
     return choices[randomIndex];
@@ -17,7 +17,7 @@ function playRound(playerSelection, computerSelection) {
 
     // check for tie
     if (computerSelection === playerSelection) {
-        return `Both chose ${computerSelection}. Its a Tie =/`
+        return `Both chose ${computerSelection}. Its a tie =/`
     }
 
     // initialize boolean, true if match winner
@@ -53,31 +53,24 @@ function playGame(playerChoice){
     const result = playRound(playerChoice, compChoice);
     if (result === 'win') {
         playerTally++;
+        results.textContent = `Won this round! ${playerChoice} beats ${compChoice}`;
     }
     else if (result === 'lose') {
         computerTally++;
+        results.textContent = `Lost this round! ${compChoice} beats ${playerChoice}`;
     }
     else {
-        results.textContent = "Tie game, try again."
+        results.textContent = result;
     }
     score.textContent = `Player: ${playerTally}, Computer: ${computerTally}`;
     if (playerTally >= 5 || computerTally >= 5) {
-        results.textContent = playerTally >= 5 ? "Player wins" : "Comp Wins";
-        //removeListeners();
+        results.textContent = playerTally >= 5 ? "Player wins game!" : "Comp wins game!";
+        clearTimeout(myTimeout);
     }
     else {
-        window.setTimeout(() => { results.textContent = ""; }, 2000);
+        myTimeout = window.setTimeout(() => { results.textContent = ""; }, 2500);
     }
 }
-
-/* REFACTOR LISTENER FUNCTION
-function removeListeners(){
-    const buttons = document.querySelectorAll('button');
-    buttons.forEach((button) => {
-        button.removeEventListener('click', buttonPress());
-    });
-}
-*/
 
 function attachListeners(){ 
     buttons.forEach((button) => {

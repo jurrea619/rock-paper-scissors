@@ -13,6 +13,11 @@ body {
 
 button {
     padding: 20px;
+    background-color: white;
+}
+
+button img {
+    width: 100px;
 }
 
 #score {
@@ -20,4 +25,9 @@ button {
     padding: 10px;
     background-color: white;
     text-align: center;
+}
+
+#results {
+    font-size: 24px;
+    font-weight: bold;
 }
